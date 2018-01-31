@@ -14,8 +14,8 @@ import json #used for debug printing
 
 
 # instantiate Slack client
-slack_client = SlackClient("xoxb-306670163680-zbJco3rNSTEdC5diaul9c6VM")
-# starterbot's user ID in Slack: value is assigned after the bot starts up
+with open('TOKEN.txt', 'r') as myfile:
+    slack_client = SlackClient(myfile.read())# starterbot's user ID in Slack: value is assigned after the bot starts up
 starterbot_id = None
 
 # constants
