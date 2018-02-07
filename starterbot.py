@@ -11,6 +11,7 @@ import re
 from slackclient import SlackClient
 
 import json #used for debug printing
+import requests
 
 
 # instantiate Slack client
@@ -51,14 +52,23 @@ def parse_direct_mention(message_text):
     return (matches.group(1), matches.group(2).strip()) if matches else (None, None)
 
 def handle_command(command, channel):
+	url = "http://api.openweathermap.org/data/2.5/weather?"
+    	params = dict(q=command, appid='60248085880bc4b42f8067f309bcc91a')
+    	resp = requests.get(url=url, params=params)
+    	data = json.loads(resp.text)
+        
+    	if(resp.status_code == 200):
+        	response =  str(data["weather"][0]["description"]) + " " + str(data["main"]["temp"]-273) + " degrees"
+        
+    	else:
+        	# Finds and executes the given command, filling in response
+        	response = command
     """
         Executes bot command if the command is known
     """
     # Default response is help text for the user
     default_response = "Not sure what you mean. Try *{}*.".format(EXAMPLE_COMMAND)
 
-    # Finds and executes the given command, filling in response
-    response = command
     # This is where you start to implement more commands!
     if command.startswith(EXAMPLE_COMMAND):
         response = "Sure...write some more code then I can do that!"
